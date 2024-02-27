@@ -1,0 +1,8 @@
+{
+    "displayName": "Service Locator",
+    "description": "Service locator utility for managing dependencies",
+    "name": "com.virtualmaker.servicelocator",
+    "unity": "2020.3",
+    "version": "1.0.0",
+    "category": "utilities"
+}
