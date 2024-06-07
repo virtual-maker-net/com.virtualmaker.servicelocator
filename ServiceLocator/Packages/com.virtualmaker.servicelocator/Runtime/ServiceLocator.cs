@@ -108,6 +108,11 @@ namespace VirtualMaker
 
         private void OnEnable()
         {
+            if (!Application.isPlaying)
+            {
+                return;
+            }
+
             if (_servicesInOrder.Count == 0)
             {
                 RegisterServices();
@@ -121,6 +126,11 @@ namespace VirtualMaker
 
         private void OnDisable()
         {
+            if (!Application.isPlaying)
+            {
+                return;
+            }
+
             for (int i = _servicesInOrder.Count - 1; i >= 0; i--)
             {
                 _servicesInOrder[i].ServiceDisable();
