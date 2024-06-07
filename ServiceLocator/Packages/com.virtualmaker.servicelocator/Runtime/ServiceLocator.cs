@@ -108,6 +108,11 @@ namespace VirtualMaker
 
         private void OnEnable()
         {
+            if (_servicesInOrder.Count == 0)
+            {
+                RegisterServices();
+            }
+
             foreach (var service in _servicesInOrder)
             {
                 service.ServiceEnable();
