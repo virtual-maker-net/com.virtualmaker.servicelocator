@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,8 +7,8 @@ namespace VirtualMaker
 {
     public interface IService
     {
-        void Initialize();
-        void Shutdown();
+        void ServiceEnable();
+        void ServiceDisable();
     }
 
     [ExecuteAlways]
@@ -83,14 +84,14 @@ namespace VirtualMaker
                 return false;
             }
 
-            if (!instance._services.TryGetValue(typeof(T), out var svc))
+            if (!instance._services.TryGetValue(typeof(T), out var knownSvc))
             {
                 // Check if the service was just added in editor.
                 if (!Application.isPlaying)
                 {
                     instance.RegisterServices();
 
-                    if (instance._services.TryGetValue(typeof(T), out svc))
+                    if (instance._services.TryGetValue(typeof(T), out var svc))
                     {
                         service = (T)svc;
                         return true;
@@ -101,7 +102,7 @@ namespace VirtualMaker
                 return false;
             }
 
-            service = (T)svc;
+            service = (T)knownSvc;
             return true;
         }
 
@@ -109,15 +110,15 @@ namespace VirtualMaker
         {
             foreach (var service in _servicesInOrder)
             {
-                service.Initialize();
+                service.ServiceEnable();
             }
         }
 
         private void OnDisable()
         {
-            foreach (var service in _servicesInOrder)
+            for (int i = _servicesInOrder.Count - 1; i >= 0; i--)
             {
-                service.Shutdown();
+                _servicesInOrder[i].ServiceDisable();
             }
         }
     }
